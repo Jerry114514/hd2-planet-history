@@ -1,0 +1,41 @@
+name: Record Planet History
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # 每 5 分钟（与主站 data.json 更新周期一致）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: planet-history
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Record snapshot
+        run: python scripts/record.py
+        env:
+          PYTHONIOENCODING: utf-8
+
+      - name: Commit
+        run: |
+          git config user.name "Jerry Jiang"
+          git config user.email "69064950+Jerry114514@users.noreply.github.com"
+          git add history.json
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: 星球历史快照 ($(date -u '+%Y-%m-%d %H:%M'))"
+            git push
+          fi
