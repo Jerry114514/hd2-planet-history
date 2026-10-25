@@ -2,7 +2,7 @@ name: Record Planet History
 
 on:
   schedule:
-    - cron: '*/5 * * * *'   # 每 5 分钟（与主站 data.json 更新周期一致）
+    - cron: '*/15 * * * *'   # 每 15 分钟（与主站 data.json 更新周期一致）
   workflow_dispatch:
 
 permissions:
