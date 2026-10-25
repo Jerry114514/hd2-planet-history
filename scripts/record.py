@@ -11,7 +11,7 @@ import json, os, time, urllib.request
 
 DATA_URL = "https://jerry114514.github.io/HD2-Galatic_war-Map/data.json"
 HISTORY_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "history.json")
-RETENTION_MS = 7 * 86400 * 1000  # 7 天
+RETENTION_MS = 24 * 3600 * 1000  # 24 小时
 OWNER_ID = {"Humans": 1, "Terminids": 2, "Automaton": 3, "Automatons": 3, "Illuminate": 4}
 
 def fetch(url):
@@ -53,12 +53,12 @@ def main():
 
     if changed:
         hist["_meta"] = {
-            "desc": "每颗星球的人数/血量/归属历史（5 分钟采样，7 天滚动窗口，无变化不记录）",
+            "desc": "每颗星球的人数/血量/归属历史（15 分钟采样，24 小时滚动窗口，无变化不记录）",
             "source": DATA_URL,
             "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "fetched_at": fetched_at,
             "format": "[epoch_ms, players, health, owner_id(1=SE 2=虫 3=机 4=光)]",
-            "retention_days": 7,
+            "retention_hours": 24,
             "planets_count": len(snapshots),
         }
         hist["planets"] = snapshots
